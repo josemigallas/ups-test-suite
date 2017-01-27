@@ -17,7 +17,7 @@ class TestRunner {
         apps.forEach((app, i) => {
             setTimeout(() => {
                 API.sendNotificationToApp(message, app, options)
-            }, 1000 * i);
+            }, DELAY * i);
         });
     }
 }
