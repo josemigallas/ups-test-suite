@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Jose Miguel Gallas Olmedo",
-  "license": "MIT",
+  "author": "Aerogear team",
+  "license": "Apache",
   "dependencies": {
     "unifiedpush-admin-client": "^0.5.0",
     "unifiedpush-node-sender": "^0.14.1"
