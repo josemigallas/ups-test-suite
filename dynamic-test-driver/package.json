@@ -1,0 +1,15 @@
+{
+  "name": "dynamic-test-driver",
+  "version": "1.0.0",
+  "description": "A test driver in nodeJS that runs SEND requests against the mocked UPS data",
+  "main": "test-driver.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Aerogear team",
+  "license": "Apache",
+  "dependencies": {
+    "unifiedpush-admin-client": "^0.5.0",
+    "unifiedpush-node-sender": "^0.14.1"
+  }
+}

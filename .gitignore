@@ -1,8 +1,6 @@
 # VSCode specifics
 .vscode
 
-*.class
-
 # Package Files #
 *.jar
 *.war
@@ -26,3 +24,12 @@ release.properties
 
 .DS_Store
 *.checkstyle
+
+#Logs
+*.log
+*.log.zip
+
+#Project builds
+mock-data-loader/aerogear-mock-data-loader-1.0.0-SNAPSHOT
+
+
