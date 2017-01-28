@@ -12,6 +12,9 @@ In case of iOS devices we need to use a mock of the APNs, in this case provided 
 ### Mocked Data Loader
 A tool to produce mock data (push applications, variants and tokens) can be found into the [mock-data-loader](mock-data-loader) folder.
 
+### UPS Node.js Test Suite
+A Node.js tool that gets all PushApplications from the UPS and sends a Push notification to it. It's leveraging other AeroGear/JBoss tools. The source is in the [ups-test-suite](ups-test-suite) folder.
+
 ### Artillery
 [Artillery](https://artillery.io/) is a command-line load testing tool that will send requests directly to UPS's REST API. 
 
