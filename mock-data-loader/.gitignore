@@ -1,0 +1,8 @@
+devices.csv
+
+# Builds
+*-SNAPSHOT
+
+# Logs
+*.log.zip
+*log
