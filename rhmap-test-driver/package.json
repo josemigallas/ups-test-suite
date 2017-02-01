@@ -1,0 +1,18 @@
+{
+  "name": "rhmap-test-driver",
+  "version": "1.0.0",
+  "description": "This is a test-runner written in nodeJS that sends a push notification to each akias of an app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "AeroGear team",
+  "license": "Apache",
+  "dependencies": {
+    "async": "^2.1.4",
+    "commander": "^2.9.0",
+    "fast-csv": "^2.3.1",
+    "request": "^2.79.0",
+    "yargs": "^6.6.0"
+  }
+}
