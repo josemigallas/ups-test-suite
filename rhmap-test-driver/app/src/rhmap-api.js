@@ -9,7 +9,14 @@ class API {
     }
 
     sendNotificationToAlias(appId, alias) {
-        return request.get(`${this.baseUrl}/push/${appId}/${alias}`);
+        const executor = (resolve, reject) => {
+            request.get(`${this.baseUrl}/push/${appId}/${alias}`, (err, res) => {
+                if (err) reject(err);
+                else resolve(res);
+            });
+        };
+
+        return new Promise(executor);
     }
 }
 

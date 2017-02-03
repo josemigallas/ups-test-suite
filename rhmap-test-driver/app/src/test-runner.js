@@ -36,12 +36,8 @@ class TestRunner {
         Utils.forEachAsyncWithInterval(aliases, alias => {
             console.log(`Sending notification to ${alias} at ${Date.now() - startTime}`);
             this.api.sendNotificationToAlias(this.appId, alias)
-                .on("error", err => {
-                    console.log(`[${alias}] ERROR: ${err}`)
-                })
-                .on("response", res => {
-                    console.log(`[${alias}] RESPONSE: ${res.statusCode}`)
-                });
+                .then(res => console.log(`[${alias}] RESPONSE: ${res.statusCode} - ${res.body}`))
+                .catch(err => console.log(`[${alias}] ERROR: ${err}`));
         }, this.delay);
     }
 }
