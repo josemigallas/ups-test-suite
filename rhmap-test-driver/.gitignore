@@ -1,5 +1,6 @@
 node_modules
 .vscode
 **/temp.js
-**/devices.csv
+**/*.csv
 **/notes.js
+**.log

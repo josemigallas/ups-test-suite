@@ -6,16 +6,15 @@ const Utils = require("./utils");
 
 class TestRunner {
 
-    constructor() {
+    constructor(args) {
+        // The url of the cloud app endpoint
+        this.endPoint = args.endPoint;
         // The ID of the application that owns the target aliases.
-        this.appId;
+        this.appId = args.appId;
         // The time between one request and another
-        this.delay;
+        this.delay = args.delay;
     }
 
-    /**
-     * The URL of the node backend
-     */
     set endPoint(endPoint) {
         if (endPoint.lastIndexOf('/') === endPoint.length - 1) {
             endPoint.slice(-1);
@@ -24,21 +23,12 @@ class TestRunner {
     }
 
     /**
-     * It sends a request to the backend endpoint for each alias with a fix delay between each one
+     * Here's all the verification and common logic for start method.
      */
-    start(aliases) {
+    start() {
         if (!this.api || !this.appId) {
             throw new Error("An endpoint URL and an application ID must be provided");
         }
-
-        const startTime = Date.now();
-
-        Utils.forEachAsyncWithInterval(aliases, alias => {
-            console.log(`Sending notification to ${alias} at ${Date.now() - startTime}`);
-            this.api.sendNotificationToAlias(this.appId, alias)
-                .then(res => console.log(`[${alias}] RESPONSE: ${res.statusCode} - ${res.body}`))
-                .catch(err => console.log(`[${alias}] ERROR: ${err}`));
-        }, this.delay);
     }
 }
 
