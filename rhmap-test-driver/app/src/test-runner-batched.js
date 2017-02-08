@@ -35,7 +35,9 @@ class TestRunnerBatched extends TestRunner {
         const totalBatches = Math.ceil(aliases.length / this.batchSize);
         const batches = [totalBatches];
         for (let i = 0; i < totalBatches; i++) {
-            batches[i] = aliases.splice(0, this.batchSize);
+            const begin = i * this.batchSize;
+            const end = begin + this.batchSize;
+            batches[i] = aliases.slice(begin, end);
         }
         return batches;
     }

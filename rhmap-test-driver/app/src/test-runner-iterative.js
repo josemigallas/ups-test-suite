@@ -7,8 +7,8 @@ const Utils = require("./utils");
 
 class TestRunnerIterative extends TestRunner {
 
-    constructor() {
-        super();
+    constructor(args) {
+        super(args);
     }
 
     /**
