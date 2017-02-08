@@ -6,14 +6,23 @@ Having NPM and nodeJS installed, first download all dependencies:
 ```
 $ npm install
 ```
-Then start the test-runner passing the necessary arguments:
+Then start the test-runner by running `node index.js` and passing, at least, `-e`, `a` and `c` arguments. To see usage instructions run `node index.js -h`:
 ```
-$ node index.js <endpoint url> <appId> <path/to/devices.csv> <delay>
+Usage: node index.js [options]
+
+Options:
+  -e, --endPoint   The backend url                                    [required]
+  -a, --appId      The ID of the application that owns the target aliases
+                                                                      [required]
+  -c, --csv        The path to the CSV path containing the aliases    [required]
+  -d, --delay      The delay between each request                [default: 6500]
+  -b, --batched    If the aliases are sent in batches [boolean] [default: false]
+  -s, --batchSize  The amount of aliases for each batch           [default: 500]
+  -h, --help       Show help                                           [boolean]
+
+Examples:
+  app/index.js -e http://example.com/backend -a asdf12134 -c ./devices.csv
+  app/index.js -e http://example.com/backend -a asdf12134 -c ./devices.csv -d 100 -b -s 1000
+
 ```
-`endpoint url` -> URL to your backend cloud app.
 
-`appId` -> The ID of the application that owns the devices.
-
-`path/to/devices.csv` -> The path to the CSV file that has all tokens.
-
-`delay` -> The time in ms that will separate each request to the endpoint.

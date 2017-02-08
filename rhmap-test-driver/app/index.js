@@ -1,10 +1,12 @@
 "use strict";
 
 const Utils = require("./src/utils");
-const TestRunner = require("./src/test-runner");
+const TestRunnerBatched = require("./src/test-runner-batched");
+const TestRunnerIterative = require("./src/test-runner-iterative");
 const argv = require("yargs");
 
 const DEFAULT_DELAY = 6500;
+const DEFAULT_BATCH_SIZE = 500;
 
 let args = argv
     .usage("Usage: node index.js [options]")
@@ -24,10 +26,21 @@ let args = argv
 
     .alias("d", "delay")
     .nargs("d", 1)
+    .default("d", DEFAULT_DELAY)
     .describe("d", "The delay between each request")
-    
+
+    .alias("b", "batched")
+    .boolean("b")
+    .default("b", false)
+    .describe("b", "If the aliases are sent in batches")
+
+    .alias("s", "batchSize")
+    .nargs("s", 1)
+    .default("s", DEFAULT_BATCH_SIZE)
+    .describe("s", "The amount of aliases for each batch")
+
     .check((argv, aliases) => {
-        return !argv.delay || parseInt(argv.delay);
+        return !argv.delay || parseInt(argv.delay || parseInt(argv.batchSize));
     })
 
     .demandOption(["e", "a", "c"])
@@ -35,9 +48,10 @@ let args = argv
     .alias("h", "help")
     .argv;
 
-const testRunner = new TestRunner();
-testRunner.endPoint = args.endPoint;
-testRunner.appId = args.appId;
-testRunner.delay = args.delay || DEFAULT_DELAY;
+const testRunner = args.batched
+    ? new TestRunnerBatched(args)
+    : new TestRunnerIterative(args);
 
-Utils.getAliasesFromCSV(args.csv, aliases => testRunner.start(aliases));
+Utils.getAliasesFromCSV(args.csv, aliases => {
+    testRunner.start(aliases)
+});
