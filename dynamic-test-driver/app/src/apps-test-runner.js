@@ -1,22 +1,23 @@
 "use strict";
 
 const API = require("./ups-api");
-const Message = require("../model/message");
-const Options = require("../model/options");
 const Utils = require("./utils");
+const TestRunner = require("./test-runner");
 
 const DELAY = 1000;
 
-class AppsTestRunner {
+class AppsTestRunner extends TestRunner {
 
-    static start(apps) {
+    constructor(args) {
+        super(args);
+    }
+
+    start(apps) {
+        super.start();
         console.log(`Total apps: ${apps.length}`);
 
-        const message = new Message(`Testing!!`);
-        const options = new Options();
-
         const test = app => {
-            API.sendNotificationToApp(message, app, options)
+            API.sendNotificationToApp(this.message, app, this.options)
                 .then(res => console.log(`RESPONSE: ${res}`))
                 .catch(err => console.log(`ERROR: ${err.toString()}`))
         };

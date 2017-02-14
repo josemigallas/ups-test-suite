@@ -58,13 +58,13 @@ const args = argv
     .check((args, aliases) => {
         if (args.username && args.password) {
             // User credentials -> send push to all apps
-            // Should not be either pushApplicationID or masterSecret
-            return !args.pushApplicationID && !args.masterSecret;
+            // Don't specify also appId, masterSecret or CSV
+            return !args.pushApplicationID && !args.masterSecret && !args.csv;
         }
 
-        if (args.pushApplicationID && args.masterSecret) {
-            // App credentials -> send push to 1 single app
-            // Should not be username or password
+        if (args.pushApplicationID && args.masterSecret && args.csv) {
+            // App credentials -> send push to a list of devices of 1 app
+            // Don't specify also username or password
             return !args.username && !args.password;
         }
 
@@ -75,22 +75,13 @@ const args = argv
     .alias("h", "help")
     .argv;
 
-if (args.username && args.password) {
-    API.getApplications(username, password)
-        .then(AppsTestRunner.start)
+if (args.csv) {
+    const testRunner = new AliasTestRunner(args);
+    Utils.getAliasesFromCSV(args.csv)
+        .then(aliases => testRunner.start(aliases));
 
 } else {
-    if (args.csv) {
-        Utils.getAliasesFromCSV(args.csv, aliases => AliasTestRunner.start(args, aliases));
-
-    } else {
-        const apps = [{
-            pushApplicationID: args.pushApplicationID,
-            masterSecret: args.masterSecret
-        }];
-
-        AppsTestRunner.start(apps);
-    }
+    const testRunner = new AppsTestRunner(args);
+    API.getApplications(username, password)
+        .then(apps => testRunner.start(apps));
 }
-
-
