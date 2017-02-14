@@ -41,16 +41,6 @@ const args = argv
     .default("d", DEFAULT_DELAY)
     .describe("d", "The delay between each request")
 
-    // .alias("b", "batched")
-    // .boolean("b")
-    // .default("b", false)
-    // .describe("b", "If the aliases are sent in batches")
-
-    // .alias("s", "batchSize")
-    // .nargs("s", 1)
-    // .default("s", DEFAULT_BATCH_SIZE)
-    // .describe("s", "The amount of aliases for each batch")
-
     .alias("i", "instances")
     .nargs("i", 1)
     .default("i", DEFAULT_INSTANCES)
