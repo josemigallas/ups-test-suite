@@ -9,7 +9,9 @@
   "author": "Aerogear team",
   "license": "Apache",
   "dependencies": {
+    "fast-csv": "^2.3.1",
     "unifiedpush-admin-client": "^0.5.0",
-    "unifiedpush-node-sender": "^0.14.1"
+    "unifiedpush-node-sender": "^0.14.1",
+    "yargs": "^6.6.0"
   }
 }
