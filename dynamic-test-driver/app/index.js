@@ -5,15 +5,16 @@ const AppsTestRunner = require("./src/apps-test-runner");
 const AliasTestRunner = require("./src/alias-test-runner");
 const argv = require("yargs");
 const Utils = require("./src/utils");
+const async = require("async");
 
-const DEFAULT_DELAY = 6500;
-const DEFAULT_BATCH_SIZE = 500;
+const DEFAULT_DELAY = 1000;
 const DEFAULT_INSTANCES = 1;
 
 const args = argv
     .usage("Usage: node index.js [[user credentials] | [app credentials]] [options]")
     .example("$0 -u admin -p 123", "")
     .example("$0 -a 123abc456def -m secret -c ./devices.csv", "")
+    .example("$0 -a 123abc456def -m secret -c ./devices.csv -d 2000 -i 10", "")
 
     .alias("u", "username")
     .nargs("u", 1)
@@ -50,13 +51,13 @@ const args = argv
     // .default("s", DEFAULT_BATCH_SIZE)
     // .describe("s", "The amount of aliases for each batch")
 
-    // .alias("i", "instances")
-    // .nargs("i", 1)
-    // .default("i", DEFAULT_INSTANCES)
-    // .describe("i", "How many test runners will be instantiated simultaneously")
+    .alias("i", "instances")
+    .nargs("i", 1)
+    .default("i", DEFAULT_INSTANCES)
+    .describe("i", "How many test runners will be instantiated simultaneously")
 
     .check((args, aliases) => {
-        if (!parseInt(args.delay)) {
+        if (!parseInt(args.delay) || !parseInt(args.instances)) {
             return false;
         }
 
@@ -79,13 +80,24 @@ const args = argv
     .alias("h", "help")
     .argv;
 
+const testRunners = [];
+const testRunnerType = args.csv
+    ? AliasTestRunner
+    : AppsTestRunner;
+
+for (let i = 0; i < args.instances; i++) {
+    testRunners[i] = new testRunnerType(args);
+}
+
 if (args.csv) {
-    const testRunner = new AliasTestRunner(args);
     Utils.getAliasesFromCSV(args.csv)
-        .then(aliases => testRunner.start(aliases));
+        .then(aliases => {
+            async.each(testRunners, testRunner => testRunner.start(aliases))
+        });
 
 } else {
-    const testRunner = new AppsTestRunner(args);
     API.getApplications(username, password)
-        .then(apps => testRunner.start(apps));
+        .then(apps => {
+            async.each(testRunners, testRunner => testRunner.start(apps))
+        });
 }
