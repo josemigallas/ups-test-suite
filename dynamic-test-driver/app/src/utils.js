@@ -14,7 +14,10 @@ const DEFAULT_ENDPOINT = "http://localhost:8080/ag-push";
 const COLUMN_NAME_ALIAS = "TOKEN ALIAS";
 
 function getAliasesFromCSV(csvPath, callback) {
+<<<<<<< 13e032425790883f8ee458e77630d40a0a97c0a2
 <<<<<<< 55ec03c346c85de7553dd2da6b4ab6b60ec22919
+=======
+>>>>>>> refactor
     return new Promise((resolve, reject) => {
         const stream = fs.createReadStream(csvPath);
         const options = {
@@ -26,6 +29,7 @@ function getAliasesFromCSV(csvPath, callback) {
             .parse(options)
             .on("data", row => aliases.push(row[COLUMN_NAME_ALIAS]))
             .on("end", () => resolve(aliases));
+<<<<<<< 13e032425790883f8ee458e77630d40a0a97c0a2
 
         stream.pipe(csvStream);
     });
@@ -43,6 +47,11 @@ function getAliasesFromCSV(csvPath, callback) {
 
     stream.pipe(csvStream);
 >>>>>>> add csv functionality
+=======
+
+        stream.pipe(csvStream);
+    });
+>>>>>>> refactor
 }
 
 function forEachAsyncWithInterval(collection, func, delay) {
