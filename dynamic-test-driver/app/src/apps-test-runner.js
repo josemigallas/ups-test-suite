@@ -22,7 +22,7 @@ class AppsTestRunner extends TestRunner {
                 .catch(err => console.log(`ERROR: ${err.toString()}`))
         };
 
-        Utils.forEachAsyncWithInterval(apps, test, DELAY);
+        Utils.forEachAsyncWithInterval(apps, test, this.delay);
     }
 }
 

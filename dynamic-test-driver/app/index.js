@@ -35,10 +35,10 @@ const args = argv
     .nargs("c", 1)
     .describe("c", "The path to the CSV path containing the aliases")
 
-    // .alias("d", "delay")
-    // .nargs("d", 1)
-    // .default("d", DEFAULT_DELAY)
-    // .describe("d", "The delay between each request")
+    .alias("d", "delay")
+    .nargs("d", 1)
+    .default("d", DEFAULT_DELAY)
+    .describe("d", "The delay between each request")
 
     // .alias("b", "batched")
     // .boolean("b")
@@ -56,6 +56,10 @@ const args = argv
     // .describe("i", "How many test runners will be instantiated simultaneously")
 
     .check((args, aliases) => {
+        if (!parseInt(args.delay)) {
+            return false;
+        }
+
         if (args.username && args.password) {
             // User credentials -> send push to all apps
             // Don't specify also appId, masterSecret or CSV

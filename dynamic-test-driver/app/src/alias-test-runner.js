@@ -27,7 +27,7 @@ class AliasTestRunner extends TestRunner {
                 .catch(err => console.log(`ERROR: ${err.toString()}`))
         };
 
-        Utils.forEachAsyncWithInterval(aliases, test, DELAY);
+        Utils.forEachAsyncWithInterval(aliases, test, this.delay);
     }
 }
 

@@ -10,6 +10,7 @@ class TestRunner {
     constructor(args) {
         this.message = new Message(`Testing!!`);
         this.options = new Options();
+        this.delay = args.delay;
     }
 
     // Common logic
