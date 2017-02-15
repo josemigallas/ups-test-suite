@@ -47,7 +47,7 @@ let args = argv
     .describe("i", "How many test runners will be instantiated simultaneously")
 
     .check((argv, aliases) => {
-        return !argv.delay || parseInt(argv.delay) || parseInt(argv.batchSize) || parseInt(argv.instances);
+        return parseInt(argv.delay) || parseInt(argv.batchSize) || parseInt(argv.instances);
     })
 
     .demandOption(["e", "a", "c"])
