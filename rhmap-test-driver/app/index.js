@@ -3,76 +3,24 @@
 const Utils = require("./src/utils");
 const TestRunnerBatched = require("./src/test-runner-batched");
 const TestRunnerIterative = require("./src/test-runner-iterative");
-const argv = require("yargs");
+const TestRunnerTogether = require("./src/test-runner-together");
 const async = require("async");
 
-const DEFAULT_DELAY = 6500;
-const DEFAULT_BATCH_SIZE = 500;
-const DEFAULT_INSTANCES = 1;
+const args = Utils.buildCommandLineParser();
 
-let args = argv
-    .usage("Usage: node index.js [options]")
-    .example("$0 -e http://example.com/backend -a asdf12134 -c ./devices.csv -d 5000", "")
+const testRunnerType = getTestRunnerType(args);
 
-    .alias("e", "endPoint")
-    .nargs("e", 1)
-    .describe("e", "The backend url")
-
-    .alias("a", "appId")
-    .nargs("a", 1)
-    .describe("a", "The ID of the application that owns the target aliases")
-
-    .alias("c", "csv")
-    .nargs("c", 1)
-    .describe("c", "The path to the CSV path containing the aliases")
-
-    .alias("d", "delay")
-    .nargs("d", 1)
-    .default("d", DEFAULT_DELAY)
-    .describe("d", "The delay between each request")
-
-    .alias("b", "batched")
-    .boolean("b")
-    .default("b", false)
-    .describe("b", "If the aliases are sent in batches")
-
-    .alias("s", "batchSize")
-    .nargs("s", 1)
-    .default("s", DEFAULT_BATCH_SIZE)
-    .describe("s", "The amount of aliases for each batch")
-
-    .alias("i", "instances")
-    .nargs("i", 1)
-    .default("i", DEFAULT_INSTANCES)
-    .describe("i", "How many test runners will be instantiated simultaneously")
-
-    .alias("D", "direct")
-    .boolean("D")
-    .default("D", false)
-    .describe("D", "Wether the UPS Sender API will be use (true) or the fh.push SDK (false)")
-
-    .alias("p", "pushApplicationID")
-    .nargs("p", 1)
-    .describe("p", "App's pushApplicationID, needed to use the UPS Sender API.")
-
-    .alias("m", "masterSecret")
-    .nargs("m", 1)
-    .describe("m", "App's masterSecret, needed to use the UPS Sender API.")
-
-    .check((argv, aliases) => {
-        return !argv.delay || parseInt(argv.delay) || parseInt(argv.batchSize) || parseInt(argv.instances)
-            || (argv.direct && !argv.pushApplicationID || !argv.masterSecret);
-    })
-
-    .demandOption(["e", "a", "c"])
-    .help("h")
-    .alias("h", "help")
-    .argv;
+function getTestRunnerType(args) {
+    if (args.together) {
+        return TestRunnerTogether;
+    } else if (args.batched) {
+        return TestRunnerBatched;
+    } else {
+        return TestRunnerIterative;
+    }
+}
 
 const testRunners = [];
-const testRunnerType = args.batched
-    ? TestRunnerBatched
-    : TestRunnerIterative;
 
 for (let i = 0; i < args.instances; i++) {
     testRunners[i] = new testRunnerType(args);

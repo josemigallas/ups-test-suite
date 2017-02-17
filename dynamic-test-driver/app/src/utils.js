@@ -2,22 +2,15 @@
 
 const csv = require("fast-csv");
 const fs = require("fs");
-<<<<<<< 55ec03c346c85de7553dd2da6b4ab6b60ec22919
 const argv = require("yargs");
 
 const DEFAULT_DELAY = 1000;
 const DEFAULT_INSTANCES = 1;
 const DEFAULT_ENDPOINT = "http://localhost:8080/ag-push";
-=======
->>>>>>> add csv functionality
 
 const COLUMN_NAME_ALIAS = "TOKEN ALIAS";
 
 function getAliasesFromCSV(csvPath, callback) {
-<<<<<<< 13e032425790883f8ee458e77630d40a0a97c0a2
-<<<<<<< 55ec03c346c85de7553dd2da6b4ab6b60ec22919
-=======
->>>>>>> refactor
     return new Promise((resolve, reject) => {
         const stream = fs.createReadStream(csvPath);
         const options = {
@@ -29,29 +22,9 @@ function getAliasesFromCSV(csvPath, callback) {
             .parse(options)
             .on("data", row => aliases.push(row[COLUMN_NAME_ALIAS]))
             .on("end", () => resolve(aliases));
-<<<<<<< 13e032425790883f8ee458e77630d40a0a97c0a2
 
         stream.pipe(csvStream);
     });
-=======
-    const stream = fs.createReadStream(csvPath);
-    const options = {
-        // headers: ["variantId", "alias", "token"]
-        headers: true
-    }
-    const aliases = [];
-    const csvStream = csv
-        .parse(options)
-        .on("data", row => aliases.push(row[COLUMN_NAME_ALIAS]))
-        .on("end", () => callback(aliases));
-
-    stream.pipe(csvStream);
->>>>>>> add csv functionality
-=======
-
-        stream.pipe(csvStream);
-    });
->>>>>>> refactor
 }
 
 function forEachAsyncWithInterval(collection, func, delay) {
@@ -62,7 +35,6 @@ function forEachAsyncWithInterval(collection, func, delay) {
     });
 }
 
-<<<<<<< 55ec03c346c85de7553dd2da6b4ab6b60ec22919
 function buildCommandLineParser() {
     return argv
         .usage("Usage: node index.js [[user credentials] | [app credentials]] [options]")
@@ -141,9 +113,4 @@ module.exports = {
     buildCommandLineParser,
     getAliasesFromCSV,
     forEachAsyncWithInterval
-=======
-module.exports = {
-    getAliasesFromCSV: getAliasesFromCSV,
-    forEachAsyncWithInterval: forEachAsyncWithInterval
->>>>>>> add csv functionality
 }

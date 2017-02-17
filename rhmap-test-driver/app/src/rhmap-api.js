@@ -17,10 +17,9 @@ class API {
     }
 
     setEndPoint(endPoint) {
-        if (endPoint.lastIndexOf('/') === endPoint.length - 1) {
-            endPoint.slice(-1);
-        }
-        this.endPoint = endPoint;
+        this.endPoint = endPoint.lastIndexOf('/') === endPoint.length - 1
+            ? endPoint.slice(0, -1)
+            : endPoint;
     }
 
     setDirect(direct) {
@@ -40,6 +39,15 @@ class API {
     sendNotificationToAliases(appId, aliases) {
         return new Promise((resolve, reject) => {
             const url = `${this.endPoint}/${this.pushRoute}/${appId}?user=${this.pushApplicationID}&pass=${this.masterSecret}`;
+            request
+                .post(url, (err, res) => err ? reject(err) : resolve(res))
+                .json(aliases);
+        });
+    }
+
+    sendNotificationToAliasesInBatch(appId, aliases) {
+        return new Promise((resolve, reject) => {
+            const url = `${this.endPoint}/${this.pushRoute}/${appId}/batch?user=${this.pushApplicationID}&pass=${this.masterSecret}`;
             request
                 .post(url, (err, res) => err ? reject(err) : resolve(res))
                 .json(aliases);

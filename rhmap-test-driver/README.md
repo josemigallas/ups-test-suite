@@ -7,6 +7,9 @@ Originally, the Cloud App would only use the RHMAP push SDK, `$fh.push`, in orde
 #### Concurrency
 Concurrency can be added in two ways. By using the `-i` flag, it will instantiate more than one test-runner, which is like running the node app many times in different terminals. By adding the `-b` flag, a group of aliases will be sent together and the cloud app will handle them simultaneously using [Async](https://www.npmjs.com/package/async).
 
+#### Batch UPS Endpoint
+Recently a new endpint has been added to the UPS API, that allows to send a list of different messages, with different options, with a single request. In order to use this, the flag `-t` must be added.
+
 #### Usage
 Having [NPM and nodeJS installed](https://nodejs.org/), first download all dependencies:
 ```
@@ -28,15 +31,18 @@ UPS API specific:
 
 Options:
   -d, --delay              The delay between each request                                           [default: 6500]
-  -b, --batched            If the aliases are sent in batches                                       [boolean] [default: false]
+  -b, --batched            If the aliases are sent in batches, incompatible with -t                 [boolean] [default: false]
   -s, --batchSize          The amount of aliases for each batch                                     [default: 500]
   -i, --instances          How many test runners will be instantiated simultaneously                [default: 1]
+  -t, --together           Whether or not the aliases will be sent via the "batch" endpoint,
+                           incompatible with -b                                                     [boolean] [default: false]
 
   -h, --help               Show help
 
 Examples:
   app/index.js -e http://example.com/backend -a asdf12134 -c ./devices.csv
   app/index.js -e http://example.com/backend -a asdf12134 -c ./devices.csv -d 100 -b -s 1000
+  app/index.js -e http://example.com/backend -a asdf12134 -c ./devices.csv -t
   app/index.js -e http://example.com/backend -a asdf12134 -c ./devices.csv -D -p pushIDabcd123 -m secret123
 
 ```
