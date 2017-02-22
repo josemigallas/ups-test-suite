@@ -2,39 +2,48 @@
 
 const request = require("request");
 
+const PUSH_ROUTE_FHPUSH = "push";
+const PUSH_ROUTE_UPS_API = "push-ups";
+
 class API {
 
-    constructor(baseUrl) {
-        this.baseUrl = baseUrl;
+    constructor(args) {
+        this.setEndPoint(args.endPoint);
+        this.setDirect(args.direct);
+        if (args.direct) {
+            this.pushApplicationID = args.pushApplicationID;
+            this.masterSecret = args.masterSecret;
+        }
+    }
+
+    setEndPoint(endPoint) {
+        if (endPoint.lastIndexOf('/') === endPoint.length - 1) {
+            endPoint.slice(-1);
+        }
+        this.endPoint = endPoint;
+    }
+
+    setDirect(direct) {
+        this.pushRoute = direct
+            ? PUSH_ROUTE_UPS_API
+            : PUSH_ROUTE_FHPUSH;
     }
 
     sendNotificationToAlias(appId, alias) {
-        const executor = (resolve, reject) => {
-            request.get(`${this.baseUrl}/push/${appId}/${alias}`, (err, res) => {
-                if (err) reject(err);
-                else resolve(res);
-            });
-        };
-
-        return new Promise(executor);
+        return new Promise((resolve, reject) => {
+            const url = `${this.endPoint}/${this.pushRoute}/${appId}/${alias}?user=${this.pushApplicationID}&pass=${this.masterSecret}`;
+            request
+                .get(url, (err, res) => err ? reject(err) : resolve(res));
+        });
     }
 
     sendNotificationToAliases(appId, aliases) {
-        const executor = (resolve, reject) => {
-            const options = {
-                uri: `${this.baseUrl}/push/${appId}`,
-                body: JSON.stringify(aliases),
-                headers: {
-                    "content-type": "application/json"
-                }
-            }
-            request.post(options, (err, res) => {
-                if (err) reject(err);
-                else resolve(res);
-            });
-        };
-
-        return new Promise(executor);
+        return new Promise((resolve, reject) => {
+            const url = `${this.endPoint}/${this.pushRoute}/${appId}?user=${this.pushApplicationID}&pass=${this.masterSecret}`;
+            request
+                .post(url, (err, res) => err ? reject(err) : resolve(res))
+                .json(aliases);
+        });
     }
 }
 

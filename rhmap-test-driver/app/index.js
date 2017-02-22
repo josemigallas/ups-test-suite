@@ -46,8 +46,22 @@ let args = argv
     .default("i", DEFAULT_INSTANCES)
     .describe("i", "How many test runners will be instantiated simultaneously")
 
+    .alias("D", "direct")
+    .boolean("D")
+    .default("D", false)
+    .describe("D", "Wether the UPS Sender API will be use (true) or the fh.push SDK (false)")
+
+    .alias("p", "pushApplicationID")
+    .nargs("p", 1)
+    .describe("p", "App's pushApplicationID, needed to use the UPS Sender API.")
+
+    .alias("m", "masterSecret")
+    .nargs("m", 1)
+    .describe("m", "App's masterSecret, needed to use the UPS Sender API.")
+
     .check((argv, aliases) => {
-        return !argv.delay || parseInt(argv.delay) || parseInt(argv.batchSize) || parseInt(argv.instances);
+        return !argv.delay || parseInt(argv.delay) || parseInt(argv.batchSize) || parseInt(argv.instances)
+            || (argv.direct && !argv.pushApplicationID || !argv.masterSecret);
     })
 
     .demandOption(["e", "a", "c"])

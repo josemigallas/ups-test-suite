@@ -8,6 +8,10 @@ class Options {
         this.config = new Config();
         this.criteria = new Criteria();
     }
+
+    set alias(alias) {
+        this.criteria.alias = [alias];
+    }
 }
 
 class Criteria {

@@ -26,7 +26,7 @@ class TestRunnerBatched extends TestRunner {
         Utils.forEachAsyncWithInterval(batches, batch => {
             console.log(`Sending notification to ${batch.length} aliases at ${Date.now() - startTime}`);
             this.api.sendNotificationToAliases(this.appId, batch)
-                .then(res => console.log(`RESPONSE: ${res.statusCode} - ${res.body}`))
+                .then(res => console.log(`RESPONSE: ${res.statusCode} - ${res.body.error || res.body}`))
                 .catch(err => console.log(`ERROR: ${err}`));
         }, this.delay);
     }

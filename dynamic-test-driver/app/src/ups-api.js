@@ -3,9 +3,11 @@
 const adminClient = require("unifiedpush-admin-client");
 const senderClient = require("unifiedpush-node-sender");
 
-const BASE_URL = "http://localhost:8080/ag-push";
-
 class API {
+
+    constructor(endpoint) {
+        this.endpoint = endpoint;
+    }
 
     /**
      * Returns the list of applications
@@ -13,13 +15,13 @@ class API {
      * @argument {string} password Account's password for authentication
      * @returns {Promise} A promise containing all the applications in user's account.
      */
-    static getApplications(username, password) {
+    getApplications(username, password) {
         const settings = {
             username,
             password
         };
 
-        return adminClient(BASE_URL, settings)
+        return adminClient(this.endpoint, settings)
             .then(client => client.applications.find());
     }
 
@@ -30,17 +32,34 @@ class API {
      * @argument {Options} options An instance of Options class containing some optional parameters.
      * @returns {Promise} An empty promise if the notification was sent.
      */
-    static sendNotificationToApp(message, app, options) {
-        console.log(`Sending message to "${app.name}" {${app.pushApplicationID}}`)
-
+    sendNotificationToApp(message, app, options) {
         const settings = {
-            url: BASE_URL,
+            url: this.endpoint,
             applicationId: app.pushApplicationID,
             masterSecret: app.masterSecret
         }
 
         return senderClient(settings)
-            .then(client => client.sender.send(message, options))
+            .then(client => client.sender.send(message, options));
+    }
+
+    /**
+    * Sends a push notification to an application
+    * @argument {Array} messages An array of objects containing both Message and Options: {Message, Options}
+    * @argument {Message} message An instance of Message class containing all information.
+    * @argument {Options} options An instance of Options class containing some optional parameters.
+    * @argument {Application} app The application that will be target of the notification
+    * @returns {Promise} An empty promise if the notification was sent.
+    */
+    sendNotificationsToApp(messages, app) {
+        const settings = {
+            url: this.endpoint,
+            applicationId: app.pushApplicationID,
+            masterSecret: app.masterSecret
+        }
+
+        return senderClient(settings)
+            .then(client => client.sender.sendBatch(messages));
     }
 }
 

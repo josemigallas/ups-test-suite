@@ -22,7 +22,7 @@ class TestRunnerIterative extends TestRunner {
         Utils.forEachAsyncWithInterval(aliases, alias => {
             console.log(`Sending notification to ${alias} at ${Date.now() - startTime}`);
             this.api.sendNotificationToAlias(this.appId, alias)
-                .then(res => console.log(`[${alias}] RESPONSE: ${res.statusCode} - ${res.body}`))
+                .then(res => console.log(`[${alias}] RESPONSE: ${res.statusCode} - ${res.body.error || res.body}`))
                 .catch(err => console.log(`[${alias}] ERROR: ${err}`));
         }, this.delay);
     }

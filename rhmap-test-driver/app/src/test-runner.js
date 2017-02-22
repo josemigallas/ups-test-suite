@@ -7,19 +7,12 @@ const Utils = require("./utils");
 class TestRunner {
 
     constructor(args) {
-        // The url of the cloud app endpoint
-        this.endPoint = args.endPoint;
+        // The helper that will handle all API requests.
+        this.api = new API(args);
         // The ID of the application that owns the target aliases.
         this.appId = args.appId;
         // The time between one request and another
         this.delay = args.delay;
-    }
-
-    set endPoint(endPoint) {
-        if (endPoint.lastIndexOf('/') === endPoint.length - 1) {
-            endPoint.slice(-1);
-        }
-        this.api = new API(endPoint);
     }
 
     /**
